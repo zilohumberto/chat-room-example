@@ -20,6 +20,7 @@ class CacheGateway:
             host=self.redis_host,
             port=self.redis_port,
             password="",
+            decode_responses=True,
         )
 
     async def get_pool(self):
@@ -61,3 +62,16 @@ class CacheGateway:
     def delete(self, key):
         if self.queue.get(key):
             self.queue.delete(key)
+
+    def lset(self, key, value):
+        self.queue.lpush(key, value)
+
+    def lget(self, key):
+        _list = []
+        if self.queue.llen(key) == 0:
+            return _list
+        while self.queue.llen(key) != 0:
+            _list.append(self.queue.lpop(key))
+        self.queue.lpush(key, *_list)
+        return _list
+
