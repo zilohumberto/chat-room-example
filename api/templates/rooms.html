@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat run</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+      .container {
+        max-width: 500px;
+        padding-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p> Select your room chat</p>
+      <ul class="list_room">
+
+      </ul>
+    </div>
+    <div class="room">
+      <p> Message in room </p> 
+      <ul class="list_room">
+
+      </ul>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script>
+        var ws = new WebSocket("ws://0.0.0.0:8500/websocket")
+
+        function executeAction(message){
+            let response;
+            console.log("message:", message)
+            //console.log('Action:', actionBody.action);
+            if (message.action == 'get_rooms'){
+                get_rooms(message.params);
+            }else{
+                return null;
+            }   
+        }
+        ws.onopen = function(evt){
+            get_room = {
+                'action': 'get_rooms',
+                'params':{
+
+                }
+            }
+            ws.send(JSON.stringify(get_room))
+        }
+        ws.onmessage = function(evt){
+            try{
+                let data = JSON.parse(evt.data);
+                response = executeAction(data);
+                if (response != null){
+                    console.log('Sending response through WS')
+                    ws.send(JSON.stringify({action: response.action, params: response.params}));
+                }
+            }catch{
+                console.log(evt.data)
+                return null;
+            }   
+        }
+
+        function get_rooms(data){
+          _html = ""
+          for(index in data['rooms']){
+              var room = data['rooms'][index];
+              _html += '<li><a onclick="join_room(\''+ room + '\')">'+room+'</a></li>'
+          }
+          $('.list_room').html(_html)
+        }
+
+        function join_room(room){
+          ws.send(JSON.stringify({action: 'join_room', params: {'room': room, 'user': 'unkwon'}}));
+        }
+
+        $(function() {
+          $(".link_room").click(function(e) {
+            e.preventDefault(); // if desired...
+            // other methods to call...
+            alert(e);
+          });
+        });
+    </script>
+  </body>
+</html>
