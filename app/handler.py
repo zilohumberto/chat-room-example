@@ -41,8 +41,10 @@ class Handler(object):
                 self.taks_end = True
                 raise Exception()
             self.cache.lset(self.uuid, message)
-            await self.send({'type': 'websocket.send', 'text': message})
-
+            await self.send({'type': 'websocket.send', 'text': dumps({
+                'action': 'room_message',
+                'params': {'message': message }
+                })})
 
     async def produce_message(self, text):
         from json import loads
