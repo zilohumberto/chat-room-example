@@ -814,11 +814,11 @@ $(window).on('keydown', function(e) {
 });
 
 function newMessageReplies(msg) {
-  message = msg;
+  message = msg['message'];
   if($.trim(message) == '') {
     return false;
   }
-  $('<li class="replies"><img src="'+image+'" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+  $('<li class="replies"><img src="'+msg['image']+'" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
   $(".messages").animate({ scrollTop: $(document).height() }, "fast");
   $('.preview').html(message);
 };
@@ -837,7 +837,7 @@ function writtingMessage(msg){
           get_rooms(message.params);
       }else if(message.action == 'message_room'){
           if (message.params['user'] != user){
-            newMessageReplies(message.params['message']);
+            newMessageReplies(message.params);
           }
       }else if(message.action == 'joined_room'){
           if (message.params['user'] != user){
@@ -846,18 +846,18 @@ function writtingMessage(msg){
           }
       }else if(message.action == 'left_room'){
           writtingMessage(message.params['user']+" left");
-          setTimeout(() => {  writtingMessage(""); }, 2000);
+          setTimeout(() => {  writtingMessage("");}, 2000);
       }else if (message.action == 'writting_message_room'){
           if (message.params['user'] != user){
             writtingMessage(message.params['user']+" writting a message");
-            setTimeout(() => {  writtingMessage(""); }, 2000);
+            setTimeout(() => {   writtingMessage("");}, 2000);
           }
       }else{
           return null;
       }   
   }
   ws.onopen = function(evt){
-    join_room('facebook', user);
+    join_room('facebook', {{user | tojson }});
   }
 
   ws.onmessage = function(evt){

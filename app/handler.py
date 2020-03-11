@@ -10,6 +10,7 @@ class Handler(object):
     taks_end = False
     rooms = []
     user = None
+    obj_user = None
 
     def __init__(self, send):
         self.send = send
@@ -75,18 +76,20 @@ class Handler(object):
             return
         subscription, = await self.cache.subscribe(room)
         get_running_loop().create_task(self.reader(subscription))
-        self.user = kwargs.get('user', 'none')
-        self.cache.publish_message(room, dict(action='joined_room', params=dict(room=room, user=self.user)))
+        self.obj_user = kwargs.get('user', 'none')
+        self.user = f"{self.obj_user['name']['first']} {self.obj_user['name']['last']}" 
+        self.thumbnail = self.obj_user['picture']['thumbnail']
+        self.cache.publish_message(room, dict(action='joined_room', params=dict(room=room, user=self.user, image=self.thumbnail)))
 
     async def left_room(self, room, **kwargs):
-        self.cache.publish_message(room, dict(action='left_room', params=dict(room=room, user=self.user)))
+        self.cache.publish_message(room, dict(action='left_room', params=dict(room=room, user=self.user, image=self.thumbnail)))
         # pendding unsubscribe!
 
     async def message_room(self, room, message, **kwargs):
-        self.cache.publish_message(room, dict(action='message_room', params=dict(room=room, user=self.user, message=message)))
+        self.cache.publish_message(room, dict(action='message_room', params=dict(room=room, user=self.user, message=message, image=self.thumbnail)))
 
     async def writting_message_room(self, room, user, **kwargs):
-        self.cache.publish_message(room, dict(action='writting_message_room', params=dict(room=room, user=self.user)))
+        self.cache.publish_message(room, dict(action='writting_message_room', params=dict(room=room, user=self.user, image=self.thumbnail)))
 
     async def get_rooms(self, **kwargs):
         rooms = self.cache.lget('rooms')
