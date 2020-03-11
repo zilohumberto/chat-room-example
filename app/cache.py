@@ -31,7 +31,7 @@ class CacheGateway:
 
     def publish_message(self, key, message):
         log.debug(f"publishing in {key}: {message}")
-        return self.queue.publish(key, message)
+        return self.queue.publish(key, json.dumps(message))
 
     async def close(self):
         self.queue.close()

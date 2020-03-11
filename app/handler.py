@@ -9,6 +9,7 @@ class Handler(object):
     send = None
     taks_end = False
     rooms = []
+    user = None
 
     def __init__(self, send):
         self.send = send
@@ -22,8 +23,13 @@ class Handler(object):
                 message = await receive()
             except Exception as e:
                 raise Exception("consumer error")
+            
+            if self.taks_end:
+                break
 
             if message.get('type') == 'websocket.disconnect':
+                for room in self.rooms:
+                    await self.left_room(room)
                 self.task_end = True
                 raise Exception("task end")
 
@@ -41,10 +47,7 @@ class Handler(object):
                 self.taks_end = True
                 raise Exception()
             self.cache.lset(self.uuid, message)
-            await self.send({'type': 'websocket.send', 'text': dumps({
-                'action': 'room_message',
-                'params': {'message': message }
-                })})
+            await self.send({'type': 'websocket.send', 'text': message})
 
     async def produce_message(self, text):
         from json import loads
@@ -72,25 +75,30 @@ class Handler(object):
             return
         subscription, = await self.cache.subscribe(room)
         get_running_loop().create_task(self.reader(subscription))
-        user = kwargs.get('user', 'None')
-        self.cache.publish_message(room, f"{user} join room")
+        self.user = kwargs.get('user', 'none')
+        self.cache.publish_message(room, dict(action='joined_room', params=dict(room=room, user=self.user)))
 
-    async def left_room(self, room, user, **kwargs):
-        self.cache.publish_message(room, f"{user} left room")
+    async def left_room(self, room, **kwargs):
+        self.cache.publish_message(room, dict(action='left_room', params=dict(room=room, user=self.user)))
         # pendding unsubscribe!
 
     async def message_room(self, room, message, **kwargs):
-        self.cache.publish_message(room, message)
+        self.cache.publish_message(room, dict(action='message_room', params=dict(room=room, user=self.user, message=message)))
 
     async def writting_message_room(self, room, user, **kwargs):
-        self.cache.publish_message(room, f"{user} is writting a message")
+        self.cache.publish_message(room, dict(action='writting_message_room', params=dict(room=room, user=self.user)))
 
     async def get_rooms(self, **kwargs):
         rooms = self.cache.lget('rooms')
-        await self.send({'type': 'websocket.send', 'text': dumps(
-            {'action': 'get_rooms',
-            'params': {'rooms': rooms}
-             })})
+        await self.send(
+            {
+                'type': 'websocket.send', 
+                'text': dumps(
+                            {'action': 'get_rooms',
+                            'params': {'rooms': rooms}
+                            })
+            }
+        )
 
     async def create_room(self, room, **kwargs):
         if room in self.rooms:

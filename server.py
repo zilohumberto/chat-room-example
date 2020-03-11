@@ -8,7 +8,7 @@ if __name__ == "__main__":
         interface='asgi3',
         loop='asyncio',
         lifespan='off',
-        host='0.0.0.0',
+        host='10.218.227.134',
         port=8500,
         log_level='debug',
         timeout_keep_alive=1000

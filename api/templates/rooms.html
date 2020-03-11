@@ -704,185 +704,39 @@ Website: http://emilcarlsson.se/
   <div id="sidepanel">
     <div id="profile">
       <div class="wrap">
-        <img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
-        <p>Mike Ross</p>
-        <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
-        <div id="status-options">
-          <ul>
-            <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
-            <li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
-            <li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
-            <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
-          </ul>
-        </div>
-        <div id="expanded">
-          <label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
-          <input name="twitter" type="text" value="mikeross" />
-          <label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
-          <input name="twitter" type="text" value="ross81" />
-          <label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
-          <input name="twitter" type="text" value="mike.ross" />
-        </div>
+        <img id="profile-img" src="{{user.picture.thumbnail}}" class="online" alt="" />
+        <p>{{user.name.first }} {{user.name.last}}</p>
       </div>
-    </div>
-    <div id="search">
-      <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-      <input type="text" placeholder="Search contacts..." />
     </div>
     <div id="contacts">
       <ul>
         <li class="contact">
           <div class="wrap">
             <span class="contact-status online"></span>
-            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+            <img src="data:image/png;base64,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" alt="" />
             <div class="meta">
-              <p class="name">Louis Litt</p>
-              <p class="preview">You just got LITT up, Mike.</p>
-            </div>
-          </div>
-        </li>
-        <li class="contact active">
-          <div class="wrap">
-            <span class="contact-status busy"></span>
-            <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-            <div class="meta">
-              <p class="name">Harvey Specter</p>
-              <p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
-            </div>
-          </div>
-        </li>
-        <li class="contact">
-          <div class="wrap">
-            <span class="contact-status away"></span>
-            <img src="http://emilcarlsson.se/assets/rachelzane.png" alt="" />
-            <div class="meta">
-              <p class="name">Rachel Zane</p>
-              <p class="preview">I was thinking that we could have chicken tonight, sounds good?</p>
-            </div>
-          </div>
-        </li>
-        <li class="contact">
-          <div class="wrap">
-            <span class="contact-status online"></span>
-            <img src="http://emilcarlsson.se/assets/donnapaulsen.png" alt="" />
-            <div class="meta">
-              <p class="name">Donna Paulsen</p>
-              <p class="preview">Mike, I know everything! I'm Donna..</p>
-            </div>
-          </div>
-        </li>
-        <li class="contact">
-          <div class="wrap">
-            <span class="contact-status busy"></span>
-            <img src="http://emilcarlsson.se/assets/jessicapearson.png" alt="" />
-            <div class="meta">
-              <p class="name">Jessica Pearson</p>
-              <p class="preview">Have you finished the draft on the Hinsenburg deal?</p>
-            </div>
-          </div>
-        </li>
-        <li class="contact">
-          <div class="wrap">
-            <span class="contact-status"></span>
-            <img src="http://emilcarlsson.se/assets/haroldgunderson.png" alt="" />
-            <div class="meta">
-              <p class="name">Harold Gunderson</p>
-              <p class="preview">Thanks Mike! :)</p>
-            </div>
-          </div>
-        </li>
-        <li class="contact">
-          <div class="wrap">
-            <span class="contact-status"></span>
-            <img src="http://emilcarlsson.se/assets/danielhardman.png" alt="" />
-            <div class="meta">
-              <p class="name">Daniel Hardman</p>
-              <p class="preview">We'll meet again, Mike. Tell Jessica I said 'Hi'.</p>
-            </div>
-          </div>
-        </li>
-        <li class="contact">
-          <div class="wrap">
-            <span class="contact-status busy"></span>
-            <img src="http://emilcarlsson.se/assets/katrinabennett.png" alt="" />
-            <div class="meta">
-              <p class="name">Katrina Bennett</p>
-              <p class="preview">I've sent you the files for the Garrett trial.</p>
-            </div>
-          </div>
-        </li>
-        <li class="contact">
-          <div class="wrap">
-            <span class="contact-status"></span>
-            <img src="http://emilcarlsson.se/assets/charlesforstman.png" alt="" />
-            <div class="meta">
-              <p class="name">Charles Forstman</p>
-              <p class="preview">Mike, this isn't over.</p>
-            </div>
-          </div>
-        </li>
-        <li class="contact">
-          <div class="wrap">
-            <span class="contact-status"></span>
-            <img src="http://emilcarlsson.se/assets/jonathansidwell.png" alt="" />
-            <div class="meta">
-              <p class="name">Jonathan Sidwell</p>
-              <p class="preview"><span>You:</span> That's bullshit. This deal is solid.</p>
+              <p class="name">Facebook</p>
+              <p class="preview">Welcome!</p>
             </div>
           </div>
         </li>
       </ul>
     </div>
     <div id="bottom-bar">
-      <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
-      <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
     </div>
   </div>
   <div class="content">
     <div class="contact-profile">
       <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-      <p class="chat_name">Harvey Specter</p>
+      <p class="chat_name">Facebook</p>
     </div>
     <div class="messages">
       <ul class="active_chat">
-        <li class="sent">
-          <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-          <p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-        </li>
-        <li class="replies">
-          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-          <p>When you're backed against the wall, break the god damn thing down.</p>
-        </li>
-        <li class="replies">
-          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-          <p>Excuses don't win championships.</p>
-        </li>
-        <li class="sent">
-          <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-          <p>Oh yeah, did Michael Jordan tell you that?</p>
-        </li>
-        <li class="replies">
-          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-          <p>No, I told him that.</p>
-        </li>
-        <li class="replies">
-          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-          <p>What are your choices when someone puts a gun to your head?</p>
-        </li>
-        <li class="sent">
-          <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-          <p>What are you talking about? You do what they say or they shoot you.</p>
-        </li>
-        <li class="replies">
-          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-          <p>Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
-        </li>
       </ul>
     </div>
     <div class="message-input">
       <div class="wrap">
       <input type="text" placeholder="Write your message..." />
-      <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
       <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
       </div>
     </div>
@@ -928,10 +782,12 @@ function newMessage() {
   if($.trim(message) == '') {
     return false;
   }
-  $('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+  $('<li class="sent"><img src="'+{{user.picture.thumbnail | tojson }}+'" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
   $('.message-input input').val(null);
   $('.contact.active .preview').html('<span>You: </span>' + message);
   $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+  send({action: 'message_room', params: {'room': room, 'user': user, 'message': message}});
+  $('.preview').html("you: " +message);
 };
 
 $('.submit').click(function() {
@@ -950,35 +806,39 @@ function newMessageReplies(msg) {
   if($.trim(message) == '') {
     return false;
   }
-  $('<li class="replies"><img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+  $('<li class="replies"><img src="'+image+'" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
   $('.message-input input').val(null);
-  //$('.contact.active .preview').html('<span>You: </span>' + message);
   $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+  $('.preview').html(message);
 };
-  var ws = new WebSocket("ws://0.0.0.0:8500/websocket")
-
+  var ws = new WebSocket("ws://10.218.227.134:8500/websocket")
+  var user = {{user.name.first | tojson }}+" "+{{user.name.last | tojson}};
+  var room = 'facebook';
+  var image = "data:image/png;base64,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";
   function executeAction(message){
       let response;
       console.log("message:", message)
       //console.log('Action:', actionBody.action);
       if (message.action == 'get_rooms'){
           get_rooms(message.params);
-      }else if(message.action == 'room_message'){
-          newMessageReplies(message.params['message'])
+      }else if(message.action == 'message_room'){
+          if (message.params['user'] != user){
+            newMessageReplies(message.params['message'])
+          }
+      }else if(message.action == 'joined_room'){
+          if (message.params['user'] != user){
+            newMessageReplies(message.params['user']+" join")
+          }
+      }else if(message.action == 'left_room'){
+          newMessageReplies(message.params['user']+" left")
       }else{
           return null;
       }   
   }
   ws.onopen = function(evt){
-      action = {
-          'action': 'join_room',
-          'params':{
-              'user': 'estamos',
-              'room': 'estamos_online_all'
-          }
-      }
-      ws.send(JSON.stringify(action))
+    join_room('facebook', user);
   }
+
   ws.onmessage = function(evt){
       try{
           let data = JSON.parse(evt.data);
@@ -1002,8 +862,12 @@ function newMessageReplies(msg) {
     $('.list_room').html(_html)
   }
 
-  function join_room(room){
-    ws.send(JSON.stringify({action: 'join_room', params: {'room': room, 'user': 'unkwon'}}));
+  function join_room(room, user='unkwon'){
+    ws.send(JSON.stringify({action: 'join_room', params: {'room': room, 'user': user}}));
+  }
+
+  function send(message){
+    ws.send(JSON.stringify(message));
   }
 
 //# sourceURL=pen.js
