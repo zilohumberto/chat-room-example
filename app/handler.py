@@ -91,6 +91,19 @@ class Handler(object):
                         room=room, user='wikipedia chat bot!', message=msg, image='https://en.wikipedia.org/static/images/project-logos/enwiki.png')
                 )
             )
+            return
+        from app.movies import search_reg
+        movie_msg, movie_poster = search_reg(message)
+        if movie_msg:
+            self.cache.publish_message(
+                room,
+                dict(
+                    action='message_room_bot', params=dict(
+                        room=room, user='movie db chat bot!',
+                        message=movie_msg,
+                        image=movie_poster)
+                )
+            )
 
     async def writing_message_room(self, room, user, **kwargs):
         self.cache.publish_message(room, dict(action='writing_message_room', params=dict(room=room, user=self.user, image=self.thumbnail)))
