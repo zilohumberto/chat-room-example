@@ -1,7 +1,8 @@
 from uuid import uuid4
 from asyncio import sleep, get_running_loop
 from app.cache import CacheGateway
-from json import dumps
+from json import dumps, loads
+
 
 class Handler(object):
     uuid = str(uuid4())
@@ -36,7 +37,7 @@ class Handler(object):
 
             if message.get('type') == 'websocket.connect':
                 continue
-            text =  message['text']
+            text = message['text']
             await self.produce_message(text)
             await sleep(0.1)
 
@@ -51,18 +52,12 @@ class Handler(object):
             await self.send({'type': 'websocket.send', 'text': message})
 
     async def produce_message(self, text):
-        from json import loads
-        try:
-            body = loads(text)
-        except:
-            import pdb; pdb.set_trace()
-            print(text) # is a normal message
-            return
+        body = loads(text)
         actions_function = {
             'join_room': self.join_room,
             'left_room': self.left_room,
             'message_room': self.message_room,
-            'writting_message_room': self.writting_message_room,
+            'writing_message_room': self.writing_message_room,
             'get_rooms': self.get_rooms,
             'create_room': self.create_room,
         }
@@ -76,20 +71,29 @@ class Handler(object):
             return
         subscription, = await self.cache.subscribe(room)
         get_running_loop().create_task(self.reader(subscription))
-        self.obj_user = kwargs.get('user', 'none')
+        self.obj_user = kwargs['user']
         self.user = f"{self.obj_user['name']['first']} {self.obj_user['name']['last']}" 
         self.thumbnail = self.obj_user['picture']['thumbnail']
         self.cache.publish_message(room, dict(action='joined_room', params=dict(room=room, user=self.user, image=self.thumbnail)))
 
     async def left_room(self, room, **kwargs):
         self.cache.publish_message(room, dict(action='left_room', params=dict(room=room, user=self.user, image=self.thumbnail)))
-        # pendding unsubscribe!
 
     async def message_room(self, room, message, **kwargs):
         self.cache.publish_message(room, dict(action='message_room', params=dict(room=room, user=self.user, message=message, image=self.thumbnail)))
+        from app.wiki import split_msg
+        msg = split_msg(message)
+        if msg:
+            self.cache.publish_message(
+                room,
+                dict(
+                    action='message_room_bot', params=dict(
+                        room=room, user='wikipedia chat bot!', message=msg, image='https://en.wikipedia.org/static/images/project-logos/enwiki.png')
+                )
+            )
 
-    async def writting_message_room(self, room, user, **kwargs):
-        self.cache.publish_message(room, dict(action='writting_message_room', params=dict(room=room, user=self.user, image=self.thumbnail)))
+    async def writing_message_room(self, room, user, **kwargs):
+        self.cache.publish_message(room, dict(action='writing_message_room', params=dict(room=room, user=self.user, image=self.thumbnail)))
 
     async def get_rooms(self, **kwargs):
         rooms = self.cache.lget('rooms')

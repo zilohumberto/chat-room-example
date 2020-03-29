@@ -4,6 +4,7 @@ from logging import getLogger
 
 log = getLogger(__name__)
 
+
 async def runserver(scope, receive, send):
     try:
         handler = Handler(send)
