@@ -8,7 +8,7 @@ class Handler(object):
     uuid = str(uuid4())
     cache = None
     send = None
-    taks_end = False
+    task_end = False
     rooms = []
     user = None
     obj_user = None
@@ -26,7 +26,7 @@ class Handler(object):
             except Exception as e:
                 raise Exception("consumer error")
             
-            if self.taks_end:
+            if self.task_end:
                 break
 
             if message.get('type') == 'websocket.disconnect':
@@ -46,7 +46,7 @@ class Handler(object):
             try:
                 message = message.decode('utf-8')
             except:
-                self.taks_end = True
+                self.task_end = True
                 raise Exception()
             self.cache.lset(self.uuid, message)
             await self.send({'type': 'websocket.send', 'text': message})
