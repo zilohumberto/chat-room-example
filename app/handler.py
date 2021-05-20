@@ -12,6 +12,7 @@ class Handler(object):
     rooms = []
     user = None
     obj_user = None
+    thumbnail = None
 
     def __init__(self, send):
         self.send = send
